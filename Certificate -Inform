@@ -1,65 +1,152 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: policy-certificatepolicy
-  namespace: open-cluster-management-policies
   annotations:
-    policy.open-cluster-management.io/standards: NIST-CSF
     policy.open-cluster-management.io/categories: PR.DS DataSecurity
     policy.open-cluster-management.io/controls: PR.DS-2 Data-in-transit
+    policy.open-cluster-management.io/standards: NIST-CSF
+  creationTimestamp: '2022-04-11T06:40:57Z'
+  generation: 2
+  managedFields:
+    - apiVersion: policy.open-cluster-management.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:policy.open-cluster-management.io/categories: {}
+            f:policy.open-cluster-management.io/controls: {}
+            f:policy.open-cluster-management.io/standards: {}
+        f:spec:
+          .: {}
+          f:disabled: {}
+          f:policy-templates: {}
+          f:remediationAction: {}
+      manager: unknown
+      operation: Update
+      time: '2022-04-11T06:40:57Z'
+    - apiVersion: policy.open-cluster-management.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:status:
+          .: {}
+          f:compliant: {}
+          f:placement: {}
+          f:status: {}
+      manager: governance-policy-propagator
+      operation: Update
+      subresource: status
+      time: '2022-04-11T06:41:27Z'
+  name: policy-certificatepolicy
+  namespace: openshift-ingress
+  resourceVersion: '2023091'
+  uid: 936d1d7d-7aa9-467b-b011-57505e1eb586
 spec:
-  remediationAction: inform
   disabled: false
   policy-templates:
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
-        kind: CertificatePolicy # cert management expiration
+        kind: CertificatePolicy
         metadata:
           name: policy-certificatepolicy-example
         spec:
-          namespaceSelector:
-            include: ["default"]
-            exclude: ["kube-*"]
-          remediationAction: inform # will be overridden by remediationAction in parent policy
-          severity: low
           minimumDuration: 30000h
+          namespaceSelector:
+            exclude:
+              - kube-*
+            include:
+              - '*'
+          remediationAction: inform
+          severity: low
+  remediationAction: inform
+status:
+  compliant: NonCompliant
+  placement:
+    - placementBinding: binding-policy-certificatepolicy
+      placementRule: placement-policy-certificatepolicy
+  status:
+    - clustername: local-cluster
+      clusternamespace: local-cluster
+      compliant: NonCompliant
+
 ---
 apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
 metadata:
+  creationTimestamp: '2022-04-11T06:40:57Z'
+  generation: 1
+  managedFields:
+    - apiVersion: policy.open-cluster-management.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:placementRef:
+          .: {}
+          f:apiGroup: {}
+          f:kind: {}
+          f:name: {}
+        f:subjects: {}
+      manager: unknown
+      operation: Update
+      time: '2022-04-11T06:40:57Z'
   name: binding-policy-certificatepolicy
-  namespace: open-cluster-management-policies
+  namespace: openshift-ingress
+  resourceVersion: '2005086'
+  uid: 7023cc93-d59b-4208-82fb-bfb6a85bde70
 placementRef:
+  apiGroup: apps.open-cluster-management.io
+  kind: PlacementRule
   name: placement-policy-certificatepolicy
-  kind: PlacementRule
-  apiGroup: apps.open-cluster-management.io
 subjects:
-- name: policy-certificatepolicy
-  kind: Policy
-  apiGroup: policy.open-cluster-management.io
----
-apiVersion: policy.open-cluster-management.io/v1
-kind: PlacementBinding
-metadata:
-  name: policy-certificatepolicy-production-clusters
-  namespace: open-cluster-management-policies
-placementRef:
-  name: production-clusters
-  kind: PlacementRule
-  apiGroup: apps.open-cluster-management.io
-subjects:
-- name: policy-certificatepolicy
-  kind: Policy
-  apiGroup: policy.open-cluster-management.io
+  - apiGroup: policy.open-cluster-management.io
+    kind: Policy
+    name: policy-certificatepolicy
 ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
 metadata:
+  annotations:
+    open-cluster-management.io/user-group: c3lzdGVtOmF1dGhlbnRpY2F0ZWQ6b2F1dGgsc3lzdGVtOmF1dGhlbnRpY2F0ZWQ=
+    open-cluster-management.io/user-identity: YWRtaW4=
+  creationTimestamp: '2022-04-11T06:40:57Z'
+  generation: 2
+  managedFields:
+    - apiVersion: apps.open-cluster-management.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:status:
+          .: {}
+          f:decisions: {}
+      manager: multicluster-operators-placementrule
+      operation: Update
+      subresource: status
+      time: '2022-04-11T06:40:57Z'
+    - apiVersion: apps.open-cluster-management.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:spec:
+          .: {}
+          f:clusterConditions: {}
+          f:clusterSelector:
+            .: {}
+            f:matchExpressions: {}
+      manager: unknown
+      operation: Update
+      time: '2022-04-11T06:40:57Z'
   name: placement-policy-certificatepolicy
-  namespace: open-cluster-management-policies
+  namespace: openshift-ingress
+  resourceVersion: '2010303'
+  uid: 36746728-0669-4b96-93a2-ca0bbb6afca8
 spec:
   clusterConditions:
-  - status: "True"
-    type: ManagedClusterConditionAvailable
+    - status: 'True'
+      type: ManagedClusterConditionAvailable
   clusterSelector:
-    matchExpressions: []
+    matchExpressions:
+      - key: name
+        operator: In
+        values:
+          - local-cluster
+status:
+  decisions:
+    - clusterName: local-cluster
+      clusterNamespace: local-cluster
