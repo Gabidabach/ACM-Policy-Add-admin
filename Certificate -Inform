@@ -22,7 +22,7 @@ spec:
             exclude: ["kube-*"]
           remediationAction: inform # will be overridden by remediationAction in parent policy
           severity: low
-          minimumDuration: 300h
+          minimumDuration: 30000h
 ---
 apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
