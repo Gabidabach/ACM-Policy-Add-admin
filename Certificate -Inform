@@ -55,7 +55,7 @@ spec:
             exclude:
               - kube-*
             include:
-              - '*'
+              - openshift-ingress
           remediationAction: inform
           severity: low
   remediationAction: inform
